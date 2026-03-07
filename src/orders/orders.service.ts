@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateOrderDto } from './dto/create-order.dto';
+import { UpdateOrderDto } from './dto/update-order.dto';
 import { PrismaService } from '../prisma.service';
 
 @Injectable()
@@ -48,6 +49,19 @@ export class OrdersService {
     return order;
   }
 
+  async update(id: string, updateOrderDto: UpdateOrderDto) {
+    await this.findOne(id);
+
+    // Atualizamos apenas o valor, mapeando do português (valorTotal) para o inglês (value)
+    return this.prisma.order.update({
+      where: { orderId: id },
+      data: {
+        // Se não vier valorTotal, ignora.
+        ...(updateOrderDto.valorTotal && { value: updateOrderDto.valorTotal }),
+      },
+      include: { items: true },
+    });
+  }
   async remove(id: string) {
     // Verifica se existe antes de deletar
     await this.findOne(id);
