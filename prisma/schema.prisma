@@ -28,3 +28,11 @@ model Item {
 
   @@map("items")
 }
+
+model User {
+  id       String @id @default(uuid())
+  email    String @unique
+  password String
+
+  @@map("users")
+}
