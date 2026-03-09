@@ -1,98 +1,88 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Jitterbit Order API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Uma API RESTful robusta desenvolvida em **NestJS** para o gerenciamento de pedidos e itens, cumprindo os requisitos de transformação de dados (payloads em Português para persistência em Inglês) e adicionando camadas de segurança com autenticação JWT.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 🚀 Tecnologias e Arquitetura
 
-## Description
+Este projeto foi desenhado com foco em escalabilidade, tipagem estrita e código limpo.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+* **Framework:** NestJS (Node.js) com TypeScript.
+* **Banco de Dados:** PostgreSQL.
+* **ORM:** Prisma ORM, garantindo *type-safety* de ponta a ponta.
+* **Autenticação:** Módulo customizado com JWT (JSON Web Token) e *hashing* nativo com Bcrypt.
+* **Infraestrutura:** Suporte dual-connection (Nuvem via Neon.tech ou Local via Docker).
+* **Documentação:** Swagger (OpenAPI) gerado automaticamente.
 
-## Project setup
+## ⚙️ Como Executar o Projeto Localmente
 
+### Pré-requisitos
+* Node.js (versão 18 ou superior)
+* Docker e Docker Compose (Apenas se optar por rodar o banco localmente)
+
+### Passo a Passo
+
+**1. Clone o repositório e instale as dependências:**
 ```bash
-$ npm install
+git clone <URL_DO_SEU_REPOSITORIO>
+cd jitterbit-order-api
+npm install
 ```
 
-## Compile and run the project
+**2. Configuração do Ambiente:**
 
+Crie o seu arquivo .env copiando o modelo de exemplo:
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+cp .env.example .env
 ```
 
-## Run tests
+**3. Conexão com o Banco de Dados (Escolha UMA das opções):**
 
+A infraestrutura foi pensada para a melhor experiência do avaliador.
+
+* 👉 Opção A (Recomendada / Nuvem): Utilize a DATABASE_URL do Neon fornecida junto com a entrega deste teste. Cole-a no seu .env. Não é necessário instalar ou rodar nenhum banco na sua máquina.
+* 👉 Opção B (Docker / Local): Se preferir rodar em um ambiente totalmente isolado, o projeto conta com um container configurado. Basta rodar:
 ```bash
-# unit tests
-$ npm run test
+docker-compose up -d
+```
+*(Nota: Se usar esta opção, garanta que a DATABASE_URL do seu .env está apontando para o localhost, conforme indicado no arquivo .env.example).*
 
-# e2e tests
-$ npm run test:e2e
+**4. Migrações e Tipagem (Obrigatório):**
 
-# test coverage
-$ npm run test:cov
+Independentemente da opção escolhida no passo anterior (especialmente na Opção B, onde o banco nasce totalmente vazio), é estritamente necessário criar as tabelas e gerar os tipos do Prisma Client:
+```bash
+npx prisma migrate dev
+npx prisma generate
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
+**5. Inicie o servidor:**
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+npm run start:dev
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## 📖 Como Testar a API (Swagger & Autenticação)
 
-## Resources
+A documentação interativa da API estará disponível em:
 
-Check out a few resources that may come in handy when working with NestJS:
+👉 http://localhost:3000/api/docs
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+**Fluxo de Autenticação (JWT):**
 
-## Support
+Todas as rotas de gerenciamento de pedidos (/order) estão protegidas pelo JwtAuthGuard. Para testá-las via Swagger:
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+1. Utilize a rota POST /auth/register para criar um usuário de teste.
 
-## Stay in touch
+2. Utilize a rota POST /auth/login com as mesmas credenciais para obter o seu access_token.
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+3. Suba até o topo da página do Swagger, clique no botão "Authorize" (ícone de cadeado), cole o token gerado e confirme. Todas as rotas estarão prontas para receber requisições.
 
-## License
+## 🧠 Decisões Arquiteturais Relevantes
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+### 1. A Escolha do Stack (NestJS + TypeScript + Prisma)
+* **NestJS:** Adotado pela sua arquitetura opinativa (baseada em Módulos, Controladores e Serviços) e injeção de dependências nativa. Isso garante que a aplicação já nasça com princípios SOLID e pronta para escalar de forma sustentável, evitando o "código espaguete" comum em APIs feitas com Express puro.
+* **TypeScript:** Escolha inegociável para garantir tipagem estrita de ponta a ponta. Ele atua como a nossa primeira linha de defesa, validando os contratos de dados em tempo de compilação e melhorando drasticamente a experiência de desenvolvimento e manutenção.
+* **Prisma ORM:** Selecionado pela sua integração perfeita com o TypeScript e por proporcionar consultas ao banco de dados 100% *type-safe*. Ele elimina a necessidade de sincronizar manualmente as classes do código com as tabelas do banco, além de oferecer um sistema de migrações extremamente legível.
+
+### 2. Padrões de Projeto e Regras de Negócio
+* **Transformação de Dados (DTOs e Mappers):** A conversão das chaves do JSON de entrada em Português (ex: `numeroPedido`, `valorTotal`) para o padrão da base de dados em Inglês (`orderId`, `value`) foi centralizada na camada de Serviço. O Controlador se preocupa apenas com o tráfego HTTP, respeitando o princípio de Responsabilidade Única (SRP).
+* **Segurança Fail-Fast:** A aplicação utiliza o `ConfigModule` de forma rigorosa. Se a variável `JWT_SECRET` não for fornecida no ambiente, a aplicação recusa-se a iniciar (lançando uma exceção), prevenindo que a API suba com vulnerabilidades em produção.
+* **Endpoints Fiéis ao Contrato:** As rotas foram ajustadas propositalmente para o singular (`/order`, `/order/list`) de modo a respeitarem estritamente os exemplos de URL especificados no PDF do desafio.
